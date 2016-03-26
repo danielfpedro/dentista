@@ -1,0 +1,79 @@
+.content-default{
+	background-color: darken(#FFF, 3%);
+}
+.profile-cover {
+	height: 140px;
+	text-align: center;
+	background-size: cover;
+	background-position: center center;
+}
+.profile-avatar{
+	$size: 100px;
+
+	border: 3px solid #FFF;
+
+	margin-top: -50px;
+
+	height: $size;
+	width: $size;
+	border-radius: 10px;
+}
+.profile-title {
+	color: lighten(#000, 10%);
+	font-size: 22px;
+	font-weight: bold;
+}
+.profile-labels {
+	margin: 5px 0;
+}
+.profile-col-heart-btn{
+	/*margin-top: -35px;*/
+}
+.profile-heart-btn{
+	/*$size: 50px;
+	height: $size!important;
+	width: $size!important;
+	border-radius: $size;*/
+}
+.profile-card {
+	background-color: #FFF;
+	border-top-width: 1px;
+	border-bottom-width: 1px;
+	border-top-style: solid;
+	border-bottom-style: solid;
+	border-color: $borderColor;
+	margin: 10px 0;
+
+	padding: 0 5px;
+}
+.profile-card-no-top{
+	border-top: none!important;
+	margin-top: 0!important;
+}
+.profile-card, .profile-card-title{
+	/*color: darken($mainColor, 30%)!important;*/
+	color: lighten(#000, 20%)!important;
+}
+.profile-card-title {
+	font-size: 20px;
+	margin-bottom: 5px;
+}
+.profile-card-footer{
+	/*text-align: center;*/
+}
+.profile-card-action-btn {
+	background-color: darken($mainColor, 30%)!important;
+	color: #FFF!important;
+	border-radius: 100%;
+}
+
+.label {
+	padding: 5px 10px;
+	font-size: 11px;
+	margin-right: 5px;
+	border-radius: 4px;
+}
+.label-default {
+	background-color: #EEE;
+	color: lighten(#000, 0%);
+}

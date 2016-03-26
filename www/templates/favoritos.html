@@ -1,0 +1,20 @@
+<ion-view view-title="Favoritos">
+
+    <ion-nav-buttons side="right">
+        <a href="#/app/favoritos" class="button button-icon icon ion-heart"></a>
+        <button class="button button-icon icon ion-more"></button>
+    </ion-nav-buttons>
+
+    <ion-content has-bouncing="false">
+        <ion-list>
+            <a href="#/app/perfil" class="item item-avatar" ng-repeat="dentista in dentistas track by $index">
+                <img src="img/katy.jpg">
+                <p class="item-note">{{dentista}}</p>
+                <h2>Katy Perry</h2>
+                <p>
+                    De 9:00 às 18:00
+                </p>
+            </a>
+        </ion-list>
+    </ion-content>
+</ion-view>

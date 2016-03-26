@@ -1,0 +1,31 @@
+<ion-view view-title="Dentistas">
+
+	<ion-nav-buttons side="right">
+    	<a href="#/app/favoritos" class="button button-icon icon ion-heart"></a>
+    	<a href="#/app/login" class="button button-icon icon ion-person"></a>
+    </ion-nav-buttons>
+
+	<div class="bar bar-subheader bar-light" ng-if="showSubheader">
+		<div class="row">
+			<div class="col">
+				<span class="icon ion-gear-b"></span> Volta Redonda
+			</div>
+			<div class="col text-right">
+				Cirurgião <span class="icon ion-gear-b"></span>
+			</div>
+		</div>
+	</div>
+
+    <ion-content has-bouncing="false" ng-class="{'has-subheader': teste}" on-scroll="scroll()">
+        <ion-list>
+            <a href="#/app/perfil" class="item item-avatar" ng-repeat="dentista in dentistas track by $index">
+                <img src="img/katy.jpg">
+                <p class="item-note">{{dentista}}</p>
+                <h2>Katy Perry</h2>
+                <p>
+                	De 9:00 às 18:00
+                </p>
+            </a>
+        </ion-list>
+    </ion-content>
+</ion-view>
