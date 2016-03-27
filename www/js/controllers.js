@@ -1,5 +1,34 @@
 angular.module('starter.controllers', [])
 
+.directive('fillContentHeight', function($window){
+    return {
+        restrict: 'C',
+        link: function(scope, element, attrs){
+            function fillHeight(attrs) {
+                var windowH = $window.innerHeight;
+                var content = document.getElementsByClassName('scroll-content');
+                var scrollBar = document.getElementsByClassName('scroll-bar');
+                if (scrollBar.length > 1) {
+                  // content[0].removeChild(scrollBar[0]);
+                }
+                var discount = 54;
+                if (eval(attrs.barClear)) {
+                    discount = 0;
+                    element[0].style.top = 0;
+                }
+                var finalH = (windowH - discount);
+                finalH = (ionic.Platform.isIOS()) ? finalH - 15 : finalH;
+                element[0].style.height = finalH + 'px';
+            }
+            fillHeight(attrs);
+            $window.addEventListener("resize", fillHeight);
+
+            // document.getElementsByClassName('scroll')[0].remove();
+            ///document.getElementsByClassName('scroll-bar-v')[0].style.visibility = 'hidden';
+        }
+    };
+})
+
 .directive('tey', ['$interval', function($interval) {
     return {
         restrict: 'C',
@@ -54,12 +83,16 @@ angular.module('starter.controllers', [])
 
 .controller('DentistasController', function(
     $scope,
+    $rootScope,
     $ionicActionSheet,
     $state,
     $ionicScrollDelegate,
     $interval,
     $timeout
 ) {
+
+    $rootScope.barClass = 'bar-positive';
+
     $scope.dentistas = [
         'Ponte Alta',
         'Ponte Alta',
@@ -81,18 +114,18 @@ angular.module('starter.controllers', [])
 
     $scope.lastScrollPosition = 0;
 
-    $scope.showSubheader = false;
+    $scope.showSubheader = true;
 
     var pos;
     $scope.scroll = function(){
         $timeout(function(){
             pos = $ionicScrollDelegate.getScrollPosition().top;
-            $scope.showSubheader = (pos > $scope.lastScrollPosition) ? true : false;
+            $scope.showSubheader = (pos > $scope.lastScrollPosition) ? false : true;
             $scope.lastScrollPosition = pos;
-            // console.log('Current pos: ' + pos);
-            // console.log('Last pos: ' + $scope.lastScrollPosition);
-            // console.log('Show subheader? ' + $scope.showSubheader);
-            // console.log($scope.lastScrollPosition);
+            console.log('Current pos: ' + pos);
+            console.log('Last pos: ' + $scope.lastScrollPosition);
+            console.log('Show subheader? ' + $scope.showSubheader);
+            console.log($scope.lastScrollPosition);
         });
     };
 

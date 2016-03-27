@@ -1,84 +1,64 @@
-<ion-view view-title="Perfil">
-    <ion-content has-bouncing="false" class="content-default">
-        <div class="profile-cover" style="background-image: url(img/profile_cover.jpg)">
-        </div>
-        <div class="profile-card profile-card-no-top">
-            
-            <div class="row">
-                <div class="col">
-                    <img src="img/katy.jpg" class="profile-avatar tey">    
+<ion-view view-title="">
+      <ion-nav-bar class="bar-clear">
+            <ion-nav-back-button>
+            </ion-nav-back-button>
+      </ion-nav-bar>
+    <ion-content has-bouncing="false" class="content-default fill-content-height" bar-clear="true">
+
+        <div class="perfil-container">
+            <div class="perfil-cover"></div>
+            <div class="perfil-title-container">
+                <div class="perfil-title-col padding-left padding-bottom perfil-title-col-avatar" style="">
+                    <div style="background-image: url(img/katy.jpg)" class="perfil-avatar"></div>  
                 </div>
-                <div class="col text-right profile-col-heart-btn">
-                    <button class="button button-assertive profile-heart-btn">
+                <div class="perfil-title-col padding-top padding-right" style="">
+                    <button class="button button-assertive btn-circle">
                         <span class="icon ion-heart"></span>
                     </button>
-                    <button class="button button-balanced profile-heart-btn" style="margin-left: 10px">
+                    <button class="button button-balanced btn-circle" style="margin-left: 6px">
                         <span class="icon ion-android-call"></span>
                     </button>
                 </div>
             </div>
-            <div class="row">
-                <div class="col profile-title">
-                    Katy Perry
-                </div>
+
+            <div class="perfil-name-container padding">
+                Katy Perry
             </div>
-            <div class="profile-labels">
-                <div class="row">
-                    <div class="col">
-                        <span class="label label-default">
-                            Extração de dente
-                        </span>
-                        <span class="label label-default">
-                            Limpeza
-                        </span>
-                    </div>
-                </div>
+
+            <div class="perfil-bio-container padding">
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard.
             </div>
-        </div>
+            <div class="perfil-labels-container padding perfil-container-border-bottom perfil-container-margin-bottom">
+                <span class="label label-default">
+                    Extração de dente
+                </span>
+                <span class="label label-default">
+                    Limpeza
+                </span>
 
-        <div class="profile-card">
-            <div class="profile-card-body">
-                <div class="row">
-                    <div class="col">
-                        <h3 class="profile-card-title">Conforto, Volta Redonda - RJ</h3>
-                        <p>Vila Santa cecília, Edifício Cecisa II, sala 5.</p>  
-                    </div>
-                </div>
+                <div class="padding-bottom"></div>
 
-<!--                 <div class="profile-card-footer">
-                    <div class="row">
-                        <div class="col">
-                            <button class="button button-light button-clear">
-                                <span class="icon ion-ios-location"></span> Localização
-                            </button>
-                        </div>
-                        <div class="col">
-                            <button class="button button-light button-clear">
-                                <span class="icon ion-android-call"></span> LIGAR
-                            </button>
-                        </div>
-                    </div>
-                </div> -->
+            </div>
 
-                <div class="row">
-                    <div class="col">Segunda Feira</div>
-                    <div class="col text-right">08:00 às 09:00</div>
+            <div class="perfil-map-container perfil-container-border-top" style="background-image: url(img/map.png);">
+                
+            </div>
+
+            <div class="perfil-address-container">
+                <div class="perfil-address-col perfil-address-col-text padding" style="">
+                    
+                    <div class="padding-bottom"></div>
+
+                    <div class="perfil-address-title">Conforto, Volta Redonda / RJ</div>
+                    <div>Vila Santa cecília, Edifício Cecisa II, sala 5.</div>  
+                    
+                    <div class="padding-bottom"></div>
+
                 </div>
-                <div class="row">
-                    <div class="col">Terça Feira</div>
-                    <div class="col text-right">08:00 às 09:00</div>
-                </div>
-                <div class="row">
-                    <div class="col">Terça Feira</div>
-                    <div class="col text-right">08:00 às 09:00</div>
-                </div>
-                <div class="row">
-                    <div class="col">Terça Feira</div>
-                    <div class="col text-right">08:00 às 09:00</div>
-                </div>
-                <div class="row">
-                    <div class="col">Terça Feira</div>
-                    <div class="col text-right">08:00 às 09:00</div>
+                <div class="perfil-address-col padding-right" style="">
+                    <button class="button button-positive btn-circle btn-address">
+                        <span class="icon ion-ios-location"></span>
+                    </button>
                 </div>
             </div>
         </div>

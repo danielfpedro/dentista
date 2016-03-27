@@ -15,14 +15,29 @@ $royal:                           #886aea !default;
 $dark:                            #444 !default;
 */
 
+@font-face {
+    font-family: "Lato";
+    src: url("../fonts/Lato-Regular.ttf") format("truetype");
+    font-weight: normal;
+}
+
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../lib/ionic/fonts" !default;
 
-$mainColor: #03A9F4;
-$positive: $mainColor!default;
+$main-color: #03A9F4;
+$positive: $main-color!default;
 
-$borderColor: #EEE!default;
+$border-color: #EEE!default;
+
+$font-family-sans-serif: "Lato", "Roboto", sans-serif !default;
+
+$bar-height:                      54px !default;
+/*$bar-title-font-size:             17px !default;
+$bar-padding-portrait:            5px !default;
+$bar-padding-landscape:           5px !default;
+$bar-transparency:                1 !default;*/
 
 // Include all of Ionic
+@import "www/lib/sass-flex-mixin/_flexbox";
 @import "www/lib/ionic/scss/ionic";
 @import "scss/_style";

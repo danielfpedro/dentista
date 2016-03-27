@@ -1,39 +1,119 @@
+.bar-clear{
+	background-image: url(../img/bar_clear.png)!important;
+}
+
 .content-default{
 	background-color: darken(#FFF, 3%);
 }
-.profile-cover {
+
+/*PERFIL*/
+.perfil-container{
+	@include flexbox;
+	@include flex-direction(column);
+	@include align-content(strech);
+	height: 100%;
+}
+.perfil-cover{
 	height: 140px;
-	text-align: center;
+	width: 100%;
+	background-color: $main-color;
 	background-size: cover;
 	background-position: center center;
+	background-image: url(../img/profile_cover.jpg);
 }
-.profile-avatar{
+.perfil-map-container{
+	@include flex(1);
+	background-position: center center;
+	background-size: cover;
+}
+.perfil-title-container{
+	background-color: #FFF;
+	@include flexbox;
+	@include flex-direction(row);
+	@include justify-content(space-between);
+	@include align-items(flex-start);
+	@include align-content(strech);
+}
+.perfil-bio-container, .perfil-labels-container, .perfil-address-container, .perfil-name-container{
+	background-color: #FFF;
+}
+.perfil-title-col-avatar{
+	@include flex;
+}
+.perfil-title-col{
+	height: 100%;
+}
+.perfil-container-border-bottom{
+	border-bottom: 1px solid $border-color;
+}
+.perfil-container-border-top{
+	border-top: 1px solid $border-color;
+}
+.perfil-container-margin-bottom{
+	margin-bottom: 15px;
+}
+.perfil-name-container{
+	font-weight: bold;
+	font-size: 22px;
+}
+.perfil-avatar{
 	$size: 100px;
 
 	border: 3px solid #FFF;
 
-	margin-top: -50px;
+	margin-top: -40px;
 
 	height: $size;
 	width: $size;
 	border-radius: 10px;
+
+	background-size: cover;
+	background-position: top center;
+}
+.perfil-address-container{
+	@include flexbox;
+	@include flex-direction(row);
+	@include justify-content(space-between);
+	@include align-items(flex-start);
+	@include align-content(strech);
+}
+.perfil-address-col{
+	height: 100%;
+}
+.perfil-address-title {
+	font-weight: bold;
+	font-size: 18px;
+	margin-bottom: 5px;
+}
+.perfil-address-col-text {
+	@include flex(1);
+}
+.btn-address{
+	margin-top: -20px;
+}
+.btn-circle{
+	border-radius: 100%!important;
+}
+/*
+.profile-cover {
+	height: 120px;
+	text-align: center;
+	background-size: cover;
+	background-position: center center;
 }
 .profile-title {
 	color: lighten(#000, 10%);
 	font-size: 22px;
 	font-weight: bold;
+	margin-top: -15px;
 }
 .profile-labels {
-	margin: 5px 0;
+	margin: 0px 0;
+	margin-bottom: 5px;
 }
 .profile-col-heart-btn{
-	/*margin-top: -35px;*/
 }
 .profile-heart-btn{
-	/*$size: 50px;
-	height: $size!important;
-	width: $size!important;
-	border-radius: $size;*/
 }
 .profile-card {
 	background-color: #FFF;
@@ -44,14 +124,13 @@
 	border-color: $borderColor;
 	margin: 10px 0;
 
-	padding: 0 5px;
+	padding: 5px 5px;
 }
 .profile-card-no-top{
 	border-top: none!important;
 	margin-top: 0!important;
 }
 .profile-card, .profile-card-title{
-	/*color: darken($mainColor, 30%)!important;*/
 	color: lighten(#000, 20%)!important;
 }
 .profile-card-title {
@@ -59,21 +138,24 @@
 	margin-bottom: 5px;
 }
 .profile-card-footer{
-	/*text-align: center;*/
 }
 .profile-card-action-btn {
 	background-color: darken($mainColor, 30%)!important;
 	color: #FFF!important;
 	border-radius: 100%;
-}
+}*/
 
 .label {
-	padding: 5px 10px;
+	padding: 2px 10px;
 	font-size: 11px;
 	margin-right: 5px;
 	border-radius: 4px;
+	display: inline-block;
 }
 .label-default {
 	background-color: #EEE;
 	color: lighten(#000, 0%);
+}
+.bar .title{
+	font-weight: bold;
 }
