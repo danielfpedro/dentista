@@ -24,18 +24,18 @@ $dark:                            #444 !default;
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../lib/ionic/fonts" !default;
 
-$main-color: #03A9F4;
+$main-color: #3F51B5;
 $positive: $main-color!default;
-
-$border-color: #EEE!default;
 
 $font-family-sans-serif: "Lato", "Roboto", sans-serif !default;
 
 $bar-height:                      54px !default;
-/*$bar-title-font-size:             17px !default;
-$bar-padding-portrait:            5px !default;
-$bar-padding-landscape:           5px !default;
-$bar-transparency:                1 !default;*/
+
+$item-avatar-width:               55px !default;
+$item-avatar-height:              55px !default;
+
+$color-muted: darken(#FFF, 2%) !default;
+$border-color: darken($color-muted, 3%)!default;
 
 // Include all of Ionic
 @import "www/lib/sass-flex-mixin/_flexbox";

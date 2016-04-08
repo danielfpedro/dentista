@@ -15,6 +15,7 @@ angular.module('starter.controllers', [])
                 if (eval(attrs.barClear)) {
                     discount = 0;
                     element[0].style.top = 0;
+                    console.log('Aqui');
                 }
                 var finalH = (windowH - discount);
                 finalH = (ionic.Platform.isIOS()) ? finalH - 15 : finalH;
@@ -28,56 +29,9 @@ angular.module('starter.controllers', [])
         }
     };
 })
-
-.directive('tey', ['$interval', function($interval) {
-    return {
-        restrict: 'C',
-        link: function(scope, el, attrs) {
-            // var h = el[0].offsetWidth;
-            // el[0].style.marginTop = -(h / 2) + 'px';
-            // console.log(h);
-        }
-    }
-}])
-
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
-
-    // With the new view caching in Ionic, Controllers are only called
-    // when they are recreated or on app start, instead of every page change.
-    // To listen for when this page is active (for example, to refresh data),
-    // listen for the $ionicView.enter event:
-    //$scope.$on('$ionicView.enter', function(e) {
-    //});
-
-    // Form data for the login modal
-    $scope.loginData = {};
-
-    // Create the login modal that we will use later
-    $ionicModal.fromTemplateUrl('templates/login.html', {
-        scope: $scope
-    }).then(function(modal) {
-        $scope.modal = modal;
-    });
-
-    // Triggered in the login modal to close it
-    $scope.closeLogin = function() {
-        $scope.modal.hide();
-    };
-
-    // Open the login modal
-    $scope.login = function() {
-        $scope.modal.show();
-    };
-
-    // Perform the login action when the user submits the login form
-    $scope.doLogin = function() {
-        console.log('Doing login', $scope.loginData);
-
-        // Simulate a login delay. Remove this and replace with your login
-        // code if using a login system
-        $timeout(function() {
-            $scope.closeLogin();
-        }, 1000);
+    $scope.go = function(path) {
+        $state.go(path);
     };
 })
 
@@ -88,8 +42,29 @@ angular.module('starter.controllers', [])
     $state,
     $ionicScrollDelegate,
     $interval,
-    $timeout
+    $timeout,
+    Services,
+    FormFilter
 ) {
+    
+    $scope.$on('$ionicView.beforeEnter', function(){
+        $scope.filterData = FormFilter.getData();
+        var services = Services.all();
+
+        var filterServicesCount = 0;
+        $scope.servicesSeleted = [];
+        angular.forEach($scope.filterData.services, function(value, key){
+            if (value) {
+                $scope.servicesSeleted.push(services[key].name);
+            }
+        });
+        console.log(Services.count());
+        if ($scope.servicesSeleted.length == Services.count()) {
+            $scope.servicesSeleted = 'Todos os serviços';
+        } else {
+            $scope.servicesSeleted = $scope.servicesSeleted.join(', ');
+        }
+    });
 
     $rootScope.barClass = 'bar-positive';
 
@@ -114,18 +89,27 @@ angular.module('starter.controllers', [])
 
     $scope.lastScrollPosition = 0;
 
-    $scope.showSubheader = true;
+    $scope.showSubheader = false;
+
+    $scope.scrollTop = function() {
+        $ionicScrollDelegate.scrollTop();
+    }
 
     var pos;
     $scope.scroll = function(){
         $timeout(function(){
             pos = $ionicScrollDelegate.getScrollPosition().top;
-            $scope.showSubheader = (pos > $scope.lastScrollPosition) ? false : true;
+            if ((pos) > $scope.lastScrollPosition || pos < 2) {
+                $scope.showSubheader = false;
+            } else {
+                $scope.showSubheader = true;
+            }
+
             $scope.lastScrollPosition = pos;
-            console.log('Current pos: ' + pos);
-            console.log('Last pos: ' + $scope.lastScrollPosition);
-            console.log('Show subheader? ' + $scope.showSubheader);
-            console.log($scope.lastScrollPosition);
+            // console.log('Current pos: ' + pos);
+            // console.log('Last pos: ' + $scope.lastScrollPosition);
+            // console.log('Show subheader? ' + $scope.showSubheader);
+            // console.log($scope.lastScrollPosition);
         });
     };
 
@@ -184,6 +168,96 @@ angular.module('starter.controllers', [])
     // var $el = document.getElementsByClassName('bar');
     // console.log($el[0]);
     // $el[0].className = 'bar bar-clear';
+})
+.factory('FormFilter', function(
+    store,
+    Services
+){
+    return {
+        default: {
+            byDistance: false,
+            distance: 3
+        },
+        cities: [
+            {
+                id: 1,
+                name: 'Volta Redonda',
+            },
+            {
+                id: 2,
+                name: 'Barra Mansa',
+            }
+        ],
+        getCities: function(){
+            return this.cities;
+        },
+        getData: function(){
+            var data = store.get('formFilterData');
+            
+            var defaultServices = this.default;
+            defaultServices.services = {};
+
+            angular.forEach(Services.all(), function(value, key){
+                defaultServices.services[key] = true;
+            });
+
+            defaultServices.selectedCity = this.cities[0];
+            return (data) ? data : defaultServices;
+        },
+        setData: function(data){
+            store.set('formFilterData', data);
+        }
+    };
+})
+.factory('Services', function(){
+    return {
+        data: {
+            1: {
+                name: 'Extração de dente',
+            },
+            2: {
+                name: 'Canal',
+            },
+            3: {
+                name: 'Remoção de Placas'
+            },
+            4: {
+                name: 'Restauração'
+            },
+            5: {
+                name: 'Pintura e lavagem'
+            }
+        },
+        all: function(){
+            return this.data;
+        },
+        count: function() {
+            var total = 0;
+            angular.forEach(this.data, function(){
+                total++;
+            });
+            return total;
+        }
+    };
+})
+.controller('FiltroController', function(
+    $scope,
+    $stateParams,
+    FormFilter,
+    Services,
+    $timeout
+) {
+
+    $scope.$on('$ionicView.loaded', function(){
+        $scope.filter = FormFilter.getData();
+        $scope.services = Services.all();
+        $scope.cities = FormFilter.getCities();
+    });
+
+    $scope.$watch('filter', function() {
+        FormFilter.setData($scope.filter);
+        console.log($scope.filter);
+    }, true);
 })
 .controller('EmptyController', function($scope, $stateParams) {
 });

@@ -4,28 +4,48 @@
     	<a href="#/app/favoritos" class="button button-icon icon ion-heart"></a>
     	<a href="#/app/login" class="button button-icon icon ion-person"></a>
     </ion-nav-buttons>
+	    	
+    <ion-content
+    	has-bouncing="false"
+    	on-scroll="scroll()">
 
-	<div class="bar bar-subheader bar-light" ng-if="showSubheader">
-		<div class="row">
-			<div class="col">
-				<span class="icon ion-gear-b"></span> Volta Redonda
-			</div>
-			<div class="col text-right">
-				Cirurgião <span class="icon ion-gear-b"></span>
-			</div>
-		</div>
-	</div>
+	    <div class="row dentistas-pesquisa-bar">
+    		<div class="col col-center col-dentistas-pesquisa" style="white-space: nowrap; width: 100%; overflow: hidden; text-overflow: ellipsis;">
+    			<h2 ng-if="!filterData.byDistance">{{filterData.selectedCity.name}}</h2>
+                <h2 ng-if="filterData.byDistance">Em um raio de {{filterData.distance}} KM</h2>
+    			<span>{{servicesSeleted}}</span>
+    		</div>
+    		<div class="col col-33 col-center text-right">
+    			<button
+                    ui-sref="app.filtro"
+                    class="button button-positive button-clear button-small icon ion-ios-gear">
+    				&nbsp;&nbsp;Trocar
+    			</button>
+    		</div>
+	    </div>
 
-    <ion-content has-bouncing="false" ng-class="{'has-subheader': teste}" on-scroll="scroll()">
         <ion-list>
-            <a href="#/app/perfil" class="item item-avatar" ng-repeat="dentista in dentistas track by $index">
+            <a
+            	ui-sref="app.perfil2"
+            	class="item item-avatar"
+            	ng-repeat="dentista in dentistas track by $index">
+
                 <img src="img/katy.jpg">
-                <p class="item-note">{{dentista}}</p>
-                <h2>Katy Perry</h2>
-                <p>
-                	De 9:00 às 18:00
+                <p class="item-note text-muted" style="margin-top: 10px;">{{dentista}}</p>
+                <h2 style="margin-top: 10px;">Dr. Juliana Pena</h2>
+                <p class="text-muted">
+                	<span class="icon ion-ios-location-outline"></span>&nbsp;&nbsp;à 12 km
                 </p>
             </a>
         </ion-list>
     </ion-content>
+
+	<button
+		ng-click="scrollTop()"
+		ng-show="showSubheader"
+		class="button button-positive"
+		style="position: fixed; bottom: 0; right: 0; margin: 15px;border-radius: 50px; width: 50px; height: 50px;">
+		<span class="icon ion-chevron-up"></span>
+	</button>
+
 </ion-view>

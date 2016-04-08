@@ -1,5 +1,15 @@
+.content-colorized {
+	background-color: $main-color;
+}
 .bar-clear{
+	background: none!important;
 	background-image: url(../img/bar_clear.png)!important;
+}
+.bar {
+	border: none!important;
+}
+.bar .title{
+	font-size: 20px!important;
 }
 
 .content-default{
@@ -12,6 +22,10 @@
 	@include flex-direction(column);
 	@include align-content(strech);
 	height: 100%;
+}
+.perfil-header{
+	background-color: $color-muted;
+	border-bottom: 1px solid $border-color;
 }
 .perfil-cover{
 	height: 140px;
@@ -158,4 +172,42 @@
 }
 .bar .title{
 	font-weight: bold;
+}
+
+.item > h2 {
+	color: $main-color;
+	font-weight: bold;
+	font-size: 16px;
+}
+.item  img {
+	/*max-width: 25px!important;
+	max-height: 45px!important;*/
+}
+.item {
+	border: none;
+}
+.text-muted{
+	color: darken(#FFF, 50%)!important;
+}
+
+.custom-footer{
+	position: fixed!important;
+	display: block;
+	top: 0;
+}
+.dentistas-pesquisa-bar {
+	/*background-color: $main-color;*/
+	background-color: $color-muted;
+	border-bottom: 1px solid $border-color;
+}
+.col-dentistas-pesquisa > h2, .col-dentistas-pesquisa > span, .dentistas-pesquisa-bar .button{
+	color: lighten(#000, 30%)!important;
+}
+.col-dentistas-pesquisa > h2{
+	font-size: 15px;
+	/*font-weight: bold;*/
+	margin: 0;
+}
+.col-dentistas-pesquisa > span{
+	font-size: 12px;
 }

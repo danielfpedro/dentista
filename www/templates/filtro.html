@@ -1,0 +1,53 @@
+<ion-view view-title="Filtros">
+	<ion-content>
+		<div class="list">
+			<div class="item item-toggle">
+				Por distância
+				<label class="toggle toggle-positive">
+					<input type="checkbox" ng-model="filter.byDistance">
+					<div class="track">
+						<div class="handle"></div>
+					</div>
+				</label>
+			</div>
+
+			<div ng-if="!filter.byDistance">
+				<div class="item item-divider">Cidade</div>
+				<label class="item item-input item-select">
+					<div class="input-label">
+						Escolher cidade
+					</div>
+					<select
+						ng-model="filter.selectedCity"
+						ng-options="city.name for city in cities track by city.id">
+					</select>
+				</label>
+			</div>
+
+			<div ng-if="filter.byDistance">
+				<div class="item item-divider">Distância</div>
+				<div class="item range range-positive">
+					<input type="range" ng-model="filter.distance" min="3" max="30">
+				</div>
+				<div class="text-center padding">
+					<h4>{{filter.distance}} KM</h4>
+				</div>
+			</div>
+		</div>
+
+		<ion-list>
+			<ion-item class="item-divider">
+				Serviços
+			</ion-item>
+			<ion-checkbox
+				ng-model="filter.services[key]"
+				ng-repeat="(key, service) in services">
+				{{service.name}}
+			</ion-checkbox>
+		</ion-list>
+
+<!-- 		<div class="padding">
+			<button class="button button-positive button-block">Buscar Dentistas</button>	
+		</div> -->
+	</ion-content>
+</ion-view>
