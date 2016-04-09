@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "sass-flex-mixin": "^1.0.1",
-    "a0-angular-storage": "^0.0.15"
+    "a0-angular-storage": "^0.0.15",
+    "ngCordova": "^0.1.26-alpha"
   }
 }

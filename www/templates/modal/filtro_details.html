@@ -1,0 +1,80 @@
+<ion-modal-view>
+	<ion-header-bar>
+		<button
+			class="button button-clear button-assertive"
+			ng-click="cancelFilter()">
+			Cancelar
+		</button>
+		
+		<button
+			class="button button-clear button-positive"
+			ng-click="saveFilter()">
+			Nova Busca
+		</button>
+	</ion-header-bar>
+	<ion-content>
+
+				<div class="row">
+					<div class="col col-center text-right">
+						Por Distância <span class="icon ion-android-locate"></span>
+					</div>
+					<div class="col col-33">
+						<div class="item range range-positive">
+							<input type="range" ng-model="filter.type" min="1" max="2">
+						</div>
+					</div>
+					<div class="col col-center text-left">
+						<span class="icon ion-ios-location"></span> Por Cidade
+					</div>
+				</div>
+
+<div class="list">
+<!-- 			<div class="item item-toggle">
+				Por distância
+				<label class="toggle toggle-positive">
+					<input type="checkbox" ng-model="filter.byDistance">
+					<div class="track">
+						<div class="handle"></div>
+					</div>
+				</label>
+			</div> -->
+<!-- 			<ion-radio ng-model="filter.type" ng-value="'byCity'">
+				<span class="icon ion-edit"></span> Por Cidade
+			</ion-radio> -->
+			<div class="item item-divider">Buscar por</div>
+			<!-- <ion-radio ng-model="filter.type" ng-value="'byDistance'">Por Distância</ion-radio> -->
+
+			<div ng-if="filter.type == 2">
+				<label class="item item-input item-select">
+					<div class="input-label">
+						Escolher cidade
+					</div>
+					<select
+						ng-model="filter.selectedCity"
+						ng-options="city.name for city in cities track by city.id">
+					</select>
+				</label>
+			</div>
+
+			<div ng-if="filter.type == 1">
+				<div class="item range range-positive">
+					<input type="range" ng-model="filter.distance" min="3" max="30">
+				</div>
+				<div class="text-center">
+					<div style="font-size: 18px; font-weight: bold;">{{filter.distance}} KM</div>
+				</div>
+			</div>
+		</div>
+
+		<ion-list>
+			<ion-item class="item-divider">
+				Serviços
+			</ion-item>
+			<ion-checkbox
+				ng-model="filter.services[key]"
+				ng-repeat="(key, service) in services">
+				{{service.name}}
+			</ion-checkbox>
+		</ion-list>
+	</ion-content>
+</ion-modal-view>

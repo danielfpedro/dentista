@@ -44,48 +44,101 @@ angular.module('starter.controllers', [])
     $interval,
     $timeout,
     Services,
-    FormFilter
+    FormFilter,
+    $ionicLoading,
+    Dentistas,
+    $ionicPopup,
+    $ionicModal
 ) {
     
-    $scope.$on('$ionicView.beforeEnter', function(){
-        $scope.filterData = FormFilter.getData();
-        var services = Services.all();
+    $scope.$on('$ionicView.loaded', function(){
+        $scope.loading = true;
+        $scope.dentistas = [];
 
-        var filterServicesCount = 0;
-        $scope.servicesSeleted = [];
-        angular.forEach($scope.filterData.services, function(value, key){
-            if (value) {
-                $scope.servicesSeleted.push(services[key].name);
-            }
-        });
-        console.log(Services.count());
-        if ($scope.servicesSeleted.length == Services.count()) {
-            $scope.servicesSeleted = 'Todos os serviços';
-        } else {
-            $scope.servicesSeleted = $scope.servicesSeleted.join(', ');
-        }
+        Dentistas
+            .get()
+            .then(function(data){
+                $scope.dentistas = data;
+            })
+            .finally(function(){
+                $scope.loading = false;
+            });
     });
 
-    $rootScope.barClass = 'bar-positive';
+    $scope.$on('$ionicView.beforeEnter', function(){
+        // var services = Services.all();
 
-    $scope.dentistas = [
-        'Ponte Alta',
-        'Ponte Alta',
-        'Ponte Alta',
-        'Conforto',
-        'Conforto',
-        'Aterrado',
-        'Aterrado',
-        'Retiro',
-        'Retiro',
-        'Retiro',
-        'Agua Limpa',
-        'Agua Limpa'
-    ];
+        // var filterServicesCount = 0;
+        // $scope.servicesSeleted = [];
+        // angular.forEach($scope.filterData.services, function(value, key){
+        //     if (value) {
+        //         $scope.servicesSeleted.push(services[key].name);
+        //     }
+        // });
+        
+        // if ($scope.servicesSeleted.length == Services.count()) {
+        //     $scope.servicesSeleted = 'Todos os serviços';
+        // } else {
+        //     $scope.servicesSeleted = $scope.servicesSeleted.join(', ');
+        // }
+    });
 
-    // $interval(function(){
-    //     console.log($ionicScrollDelegate.getScrollPosition())    
-    // }, 1000);
+
+    $ionicModal.fromTemplateUrl('templates/modal/filtro_details.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
+        $scope.modal = modal;
+    });
+    $scope.openModal = function() {
+        $scope.modal.show();
+    };
+    $scope.closeModal = function() {
+        $scope.modal.hide();
+    };
+    //Cleanup the modal when we're done with it!
+    $scope.$on('$destroy', function() {
+        $scope.modal.remove();
+    });
+    // Execute action on hide modal
+    $scope.$on('modal.hidden', function() {
+        // Execute action
+    });
+    // Execute action on remove modal
+    $scope.$on('modal.removed', function() {
+        // Execute action
+    });
+
+    $scope.showModalFiltro = function(){
+        $scope.filter = {};
+        FormFilter.getData().then(function(data){
+            $scope.filter = data;
+        });
+        $scope.services = Services.all();
+        $scope.cities = FormFilter.getCities();
+
+        $scope.openModal();
+
+        $scope.modal.show();
+    }
+    $scope.saveFilter = function(){
+        FormFilter.setData($scope.filter);
+        $scope.closeModal();
+    }
+    $scope.cancelFilter = function(){
+        $scope.closeModal();
+    }
+
+    $scope.doRefresh = function(){
+        Dentistas
+            .get()
+            .then(function(data){
+                $scope.dentistas = data;
+            })
+            .finally(function(){
+                $scope.$broadcast('scroll.refreshComplete');
+            });
+    }
 
     $scope.lastScrollPosition = 0;
 
@@ -113,11 +166,6 @@ angular.module('starter.controllers', [])
         });
     };
 
-    $scope.tey = function(pos){
-        console.log('escode');
-        $scope.showSubheader = pos;
-    }
-
     $scope.drag = function(pos){
         if ($ionicScrollDelegate.getScrollPosition().top > 0) {
             if (pos == 'up') {
@@ -127,28 +175,6 @@ angular.module('starter.controllers', [])
             }
             console.log(pos);
         }
-    };
-    
-    $scope.showNotLoggedinSheet = function() {
-        var hideSheet = $ionicActionSheet.show({
-            buttons: [
-                {text: '<strong>Fazer Login</strong>'},
-            ],
-            // destructiveText: 'Delete',
-            // titleText: 'Configurações',
-            cancelText: 'Fechar',
-            cancel: function() {
-            // add cancel code..
-            },
-            buttonClicked: function(index) {
-                if (index === 0) {
-                    $state.go('app.login');    
-                }
-                
-                return true;
-            }
-        });
-
     };
 
 })
@@ -169,12 +195,41 @@ angular.module('starter.controllers', [])
     // console.log($el[0]);
     // $el[0].className = 'bar bar-clear';
 })
+.factory('Dentistas', function(
+    store,
+    Services,
+    $q,
+    $timeout
+){
+    return {
+        get: function(){
+            var defer = $q.defer();
+            $timeout(function(){
+                defer.resolve({
+                    1: {
+                        name: 'Dr. Daniel Cocota',
+                        bairro: 'Conforto'
+                    },
+                    2: {
+                        name: 'Dr Wesley Safadão',
+                        bairro: 'Retiro'
+                    }
+                });
+            }, 1000);
+
+            return defer.promise;
+        }
+    }
+})
 .factory('FormFilter', function(
     store,
-    Services
+    Services,
+    $q,
+    $window
 ){
     return {
         default: {
+            byCity: true,
             byDistance: false,
             distance: 3
         },
@@ -192,17 +247,26 @@ angular.module('starter.controllers', [])
             return this.cities;
         },
         getData: function(){
-            var data = store.get('formFilterData');
+            var defer = $q.defer();
+
+            var data = angular.fromJson($window.localStorage.getItem('formFilterData'));
+            console.log(store.get('formFilterData'));
+
+            if (data) {
+                defer.resolve(data);
+            } else {
+                var defaultServices = this.default;
+                defaultServices.services = {};
+
+                angular.forEach(Services.all(), function(value, key){
+                    defaultServices.services[key] = true;
+                });
+
+                defaultServices.selectedCity = this.cities[0];
+                defer.resolve(defaultServices);
+            }
+            return defer.promise;
             
-            var defaultServices = this.default;
-            defaultServices.services = {};
-
-            angular.forEach(Services.all(), function(value, key){
-                defaultServices.services[key] = true;
-            });
-
-            defaultServices.selectedCity = this.cities[0];
-            return (data) ? data : defaultServices;
         },
         setData: function(data){
             store.set('formFilterData', data);
@@ -248,16 +312,6 @@ angular.module('starter.controllers', [])
     $timeout
 ) {
 
-    $scope.$on('$ionicView.loaded', function(){
-        $scope.filter = FormFilter.getData();
-        $scope.services = Services.all();
-        $scope.cities = FormFilter.getCities();
-    });
-
-    $scope.$watch('filter', function() {
-        FormFilter.setData($scope.filter);
-        console.log($scope.filter);
-    }, true);
 })
 .controller('EmptyController', function($scope, $stateParams) {
 });

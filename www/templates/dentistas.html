@@ -5,34 +5,47 @@
     	<a href="#/app/login" class="button button-icon icon ion-person"></a>
     </ion-nav-buttons>
 	    	
+    <div class="row dentistas-pesquisa-bar" style="position: fixed; top:0; margin-top: 56px;">
+        <div class="col col-center col-dentistas-pesquisa" style="white-space: nowrap; width: 100%; overflow: hidden; text-overflow: ellipsis;cd">
+            <h2 ng-if="!filterData.byDistance">{{filterData.selectedCity.name}}</h2>
+            <h2 ng-if="filterData.byDistance">Em um raio de {{filterData.distance}} KM</h2>
+            <span>{{servicesSeleted}}</span>
+        </div>
+        <div class="col col-33 col-center text-right">
+            <button
+                ng-click="showModalFiltro()"
+                class="button button-positive button-clear button-small icon ion-ios-gear">
+                &nbsp;&nbsp;Trocar
+            </button>
+        </div>
+    </div>
+
+
     <ion-content
+        style="top: 120px!important"
     	has-bouncing="false"
     	on-scroll="scroll()">
 
-	    <div class="row dentistas-pesquisa-bar">
-    		<div class="col col-center col-dentistas-pesquisa" style="white-space: nowrap; width: 100%; overflow: hidden; text-overflow: ellipsis;">
-    			<h2 ng-if="!filterData.byDistance">{{filterData.selectedCity.name}}</h2>
-                <h2 ng-if="filterData.byDistance">Em um raio de {{filterData.distance}} KM</h2>
-    			<span>{{servicesSeleted}}</span>
-    		</div>
-    		<div class="col col-33 col-center text-right">
-    			<button
-                    ui-sref="app.filtro"
-                    class="button button-positive button-clear button-small icon ion-ios-gear">
-    				&nbsp;&nbsp;Trocar
-    			</button>
-    		</div>
-	    </div>
+        <ion-refresher
+            ng-if="!loading"
+            pulling-text="Puxe para atualizar..."
+            on-refresh="doRefresh()">
+        </ion-refresher>
+
+        <div class="text-center padding" ng-if="loading">
+            <ion-spinner></ion-spinner>
+            Carregando dentistas...
+        </div>
 
         <ion-list>
             <a
             	ui-sref="app.perfil2"
             	class="item item-avatar"
-            	ng-repeat="dentista in dentistas track by $index">
+            	ng-repeat="(key, dentista) in dentistas track by $index">
 
                 <img src="img/katy.jpg">
-                <p class="item-note text-muted" style="margin-top: 10px;">{{dentista}}</p>
-                <h2 style="margin-top: 10px;">Dr. Juliana Pena</h2>
+                <p class="item-note text-muted" style="margin-top: 10px;">{{dentista.bairro}}</p>
+                <h2 style="margin-top: 10px;">{{dentista.name}}</h2>
                 <p class="text-muted">
                 	<span class="icon ion-ios-location-outline"></span>&nbsp;&nbsp;à 12 km
                 </p>

@@ -7,7 +7,8 @@
 angular.module('starter', [
     'ionic',
     'starter.controllers',
-    'angular-storage'
+    'angular-storage',
+    'ngCordova'
 ])
 
 .run(function($ionicPlatform) {
@@ -27,8 +28,7 @@ angular.module('starter', [
     });
 })
 
-.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
-
+.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, storeProvider) {
     // $ionicConfigProvider.views.transition('none');
 
     $stateProvider
