@@ -6,9 +6,9 @@
     </ion-nav-buttons>
 	    	
     <div class="row dentistas-pesquisa-bar" style="position: fixed; top:0; margin-top: 56px;">
-        <div class="col col-center col-dentistas-pesquisa" style="white-space: nowrap; width: 100%; overflow: hidden; text-overflow: ellipsis;cd">
-            <h2 ng-if="!filterData.byDistance">{{filterData.selectedCity.name}}</h2>
-            <h2 ng-if="filterData.byDistance">Em um raio de {{filterData.distance}} KM</h2>
+        <div class="col col-center col-dentistas-pesquisa" style="white-space: nowrap; width: 100%; overflow: hidden; text-overflow: ellipsis;">
+            <h2 ng-if="!filter.byDistance">{{filter.selectedCity.name}}</h2>
+            <h2 ng-if="filter.byDistance">Em um raio de {{filter.distance}} KM</h2>
             <span>{{servicesSeleted}}</span>
         </div>
         <div class="col col-33 col-center text-right">
@@ -34,12 +34,11 @@
 
         <div class="text-center padding" ng-if="loading">
             <ion-spinner></ion-spinner>
-            Carregando dentistas...
         </div>
 
         <ion-list>
             <a
-            	ui-sref="app.perfil2"
+            	ui-sref="app.perfil2({id: key})"
             	class="item item-avatar"
             	ng-repeat="(key, dentista) in dentistas track by $index">
 

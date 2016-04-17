@@ -14,19 +14,23 @@
 	</ion-header-bar>
 	<ion-content>
 
-				<div class="row">
-					<div class="col col-center text-right">
-						Por Distância <span class="icon ion-android-locate"></span>
-					</div>
-					<div class="col col-33">
-						<div class="item range range-positive">
-							<input type="range" ng-model="filter.type" min="1" max="2">
-						</div>
-					</div>
-					<div class="col col-center text-left">
-						<span class="icon ion-ios-location"></span> Por Cidade
-					</div>
-				</div>
+		<div class="padding">
+			<div class="button-bar">
+			  <button
+			  ng-click="setSearchType(1)"
+
+			  	class="button icon-left ion-ios-location  button-stable"
+			  	ng-class="{'active' : filter.searchType == 1}">
+					Por Cidade
+			  </button>
+			  <button
+			  	ng-click="setSearchType(2)"
+			  	class="button icon-left ion-android-locate button-stable"
+			  	ng-class="{'active' : filter.searchType == 2}">
+			  	Por Distância
+			  </button>
+			</div>
+		</div>
 
 <div class="list">
 <!-- 			<div class="item item-toggle">
@@ -41,10 +45,9 @@
 <!-- 			<ion-radio ng-model="filter.type" ng-value="'byCity'">
 				<span class="icon ion-edit"></span> Por Cidade
 			</ion-radio> -->
-			<div class="item item-divider">Buscar por</div>
 			<!-- <ion-radio ng-model="filter.type" ng-value="'byDistance'">Por Distância</ion-radio> -->
 
-			<div ng-if="filter.type == 2">
+			<div ng-if="filter.searchType == 1">
 				<label class="item item-input item-select">
 					<div class="input-label">
 						Escolher cidade
@@ -56,7 +59,7 @@
 				</label>
 			</div>
 
-			<div ng-if="filter.type == 1">
+			<div ng-if="filter.searchType == 2">
 				<div class="item range range-positive">
 					<input type="range" ng-model="filter.distance" min="3" max="30">
 				</div>

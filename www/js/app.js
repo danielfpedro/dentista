@@ -6,6 +6,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', [
     'ionic',
+    'starter.services',
     'starter.controllers',
     'angular-storage',
     'ngCordova'
@@ -80,7 +81,7 @@ angular.module('starter', [
             views: {
                 'menuContent': {
                     templateUrl: 'templates/login.html',
-                    // controller: 'FavoritosController'
+                    controller: 'LoginController'
                 }
             }
         })
@@ -90,15 +91,16 @@ angular.module('starter', [
         views: {
             'menuContent': {
                 templateUrl: 'templates/perfil.html',
-                controller: 'PerfilController'
+                // controller: 'PerfilController'
             }
         }
     })
     .state('app.perfil2', {
-        url: '/perfil2',
+        url: '/perfil2/:id',
         views: {
             'menuContent': {
                 templateUrl: 'templates/perfil2.html',
+                controller: 'PerfilController'
             }
         }
     })

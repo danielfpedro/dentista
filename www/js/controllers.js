@@ -48,7 +48,9 @@ angular.module('starter.controllers', [])
     $ionicLoading,
     Dentistas,
     $ionicPopup,
-    $ionicModal
+    $ionicModal,
+    store,
+    $cordovaDialogs
 ) {
     
     $scope.$on('$ionicView.loaded', function(){
@@ -56,31 +58,40 @@ angular.module('starter.controllers', [])
         $scope.dentistas = [];
 
         Dentistas
-            .get()
+            .all()
             .then(function(data){
                 $scope.dentistas = data;
             })
             .finally(function(){
                 $scope.loading = false;
             });
+
+        $scope.services = Services.all();
+        $scope.cities = FormFilter.getCities();
+
+        $scope.filter = FormFilter.getData();
+
+        $scope.filterSelectedValues();
+
     });
 
-    $scope.$on('$ionicView.beforeEnter', function(){
-        // var services = Services.all();
-
-        // var filterServicesCount = 0;
-        // $scope.servicesSeleted = [];
-        // angular.forEach($scope.filterData.services, function(value, key){
-        //     if (value) {
-        //         $scope.servicesSeleted.push(services[key].name);
-        //     }
-        // });
+    $scope.filterSelectedValues = function(){
+        $scope.servicesSeleted = [];
+        var filterServicesCount = 0;
+        angular.forEach($scope.filter.services, function(value, key){
+            if (value) {
+                $scope.servicesSeleted.push($scope.services[key].name);
+            }
+        });
         
-        // if ($scope.servicesSeleted.length == Services.count()) {
-        //     $scope.servicesSeleted = 'Todos os serviços';
-        // } else {
-        //     $scope.servicesSeleted = $scope.servicesSeleted.join(', ');
-        // }
+        if ($scope.servicesSeleted.length == Services.count()) {
+            $scope.servicesSeleted = 'Todos os serviços';
+        } else {
+            $scope.servicesSeleted = $scope.servicesSeleted.join(', ');
+        }
+    }
+
+    $scope.$on('$ionicView.beforeEnter', function(){
     });
 
 
@@ -90,48 +101,61 @@ angular.module('starter.controllers', [])
     }).then(function(modal) {
         $scope.modal = modal;
     });
-    $scope.openModal = function() {
-        $scope.modal.show();
-    };
-    $scope.closeModal = function() {
-        $scope.modal.hide();
-    };
-    //Cleanup the modal when we're done with it!
-    $scope.$on('$destroy', function() {
-        $scope.modal.remove();
-    });
-    // Execute action on hide modal
+
     $scope.$on('modal.hidden', function() {
-        // Execute action
+
     });
-    // Execute action on remove modal
-    $scope.$on('modal.removed', function() {
-        // Execute action
-    });
+
+    $scope.onCloseModal = function() {
+        $scope.filter = FormFilter.getData();
+        $scope.filterSelectedValues();
+    }
+
+    $scope.setSearchType = function(value){
+        $scope.filter.searchType = value;
+    }
 
     $scope.showModalFiltro = function(){
-        $scope.filter = {};
-        FormFilter.getData().then(function(data){
-            $scope.filter = data;
-        });
-        $scope.services = Services.all();
-        $scope.cities = FormFilter.getCities();
-
-        $scope.openModal();
-
+        $scope.filterOnOpenState = FormFilter.getData();
         $scope.modal.show();
     }
     $scope.saveFilter = function(){
         FormFilter.setData($scope.filter);
-        $scope.closeModal();
+        
+        $scope.loading = true;
+        Dentistas
+            .all()
+            .then(function(data){
+                $scope.dentistas = data;
+            })
+            .finally(function(){
+                $scope.loading = false;
+            });
+
+        $scope.modal.hide();
     }
     $scope.cancelFilter = function(){
-        $scope.closeModal();
+        if (!angular.equals($scope.filterOnOpenState, $scope.filter)) {
+
+            $cordovaDialogs
+                .confirm('Cancelando todas as alterações do filtro não serão salvas.', 'Deseja realmente cancelar?', ['Sim', 'Não'])
+                .then(function(buttonIndex) {
+                    // no button = 0, 'OK' = 1, 'Cancel' = 2
+                    var btnIndex = buttonIndex;
+                    if (btnIndex === 1) {
+                        $scope.onCloseModal();    
+                        $scope.modal.hide();
+                    }
+                });            
+        } else {
+            $scope.modal.hide();
+        }
+        
     }
 
     $scope.doRefresh = function(){
         Dentistas
-            .get()
+            .all()
             .then(function(data){
                 $scope.dentistas = data;
             })
@@ -190,119 +214,30 @@ angular.module('starter.controllers', [])
         'Retiro',
     ];
 })
-.controller('PerfilController', function($scope, $stateParams, $document) {
-    // var $el = document.getElementsByClassName('bar');
-    // console.log($el[0]);
-    // $el[0].className = 'bar bar-clear';
-})
-.factory('Dentistas', function(
-    store,
-    Services,
-    $q,
-    $timeout
-){
-    return {
-        get: function(){
-            var defer = $q.defer();
-            $timeout(function(){
-                defer.resolve({
-                    1: {
-                        name: 'Dr. Daniel Cocota',
-                        bairro: 'Conforto'
-                    },
-                    2: {
-                        name: 'Dr Wesley Safadão',
-                        bairro: 'Retiro'
-                    }
-                });
-            }, 1000);
+.controller('PerfilController', function(
+    $scope,
+    $stateParams,
+    $document,
+    Dentistas
+) {
+    $scope.$on('$ionicView.beforeEnter', function(){
+        $scope.dentista = null;
 
-            return defer.promise;
-        }
-    }
-})
-.factory('FormFilter', function(
-    store,
-    Services,
-    $q,
-    $window
-){
-    return {
-        default: {
-            byCity: true,
-            byDistance: false,
-            distance: 3
-        },
-        cities: [
-            {
-                id: 1,
-                name: 'Volta Redonda',
-            },
-            {
-                id: 2,
-                name: 'Barra Mansa',
-            }
-        ],
-        getCities: function(){
-            return this.cities;
-        },
-        getData: function(){
-            var defer = $q.defer();
-
-            var data = angular.fromJson($window.localStorage.getItem('formFilterData'));
-            console.log(store.get('formFilterData'));
-
-            if (data) {
-                defer.resolve(data);
-            } else {
-                var defaultServices = this.default;
-                defaultServices.services = {};
-
-                angular.forEach(Services.all(), function(value, key){
-                    defaultServices.services[key] = true;
-                });
-
-                defaultServices.selectedCity = this.cities[0];
-                defer.resolve(defaultServices);
-            }
-            return defer.promise;
-            
-        },
-        setData: function(data){
-            store.set('formFilterData', data);
-        }
-    };
-})
-.factory('Services', function(){
-    return {
-        data: {
-            1: {
-                name: 'Extração de dente',
-            },
-            2: {
-                name: 'Canal',
-            },
-            3: {
-                name: 'Remoção de Placas'
-            },
-            4: {
-                name: 'Restauração'
-            },
-            5: {
-                name: 'Pintura e lavagem'
-            }
-        },
-        all: function(){
-            return this.data;
-        },
-        count: function() {
-            var total = 0;
-            angular.forEach(this.data, function(){
-                total++;
+        var id = $stateParams.id;
+        Dentistas
+            .get(id)
+            .then(function(data){
+                $scope.dentista = data;
             });
-            return total;
-        }
-    };
+    });
+})
+.controller('LoginController', function(
+    $scope,
+    User
+) {
+    $scope.doLogin = function(){
+        User.doLogin();
+    }
 })
 .controller('FiltroController', function(
     $scope,
