@@ -7,6 +7,13 @@ angular.module('starter.services', [])
     $timeout
 ){
     return {
+        // Toda resposta do servidor de perfil
+        // será inserida no cache, que funcionará como uma pilha de 100 posições
+        getFromCache: function(id){
+            var cache = store.get('dentista_perfil_cache');
+            // console.log(cache[id]);
+            return (cache && typeof cache[id] != 'undefined') ? cache[id] : null;
+        },
         all: function(){
             var defer = $q.defer();
             $timeout(function(){
@@ -27,11 +34,19 @@ angular.module('starter.services', [])
         get: function(id){
             var defer = $q.defer();
             $timeout(function(){
-                defer.resolve({
+                var dentista = {
+                    id: 1,
                     name: 'Dr. Daniel Cocota',
-                    bairro: 'Conforto'
-                });
-            }, 1000);
+                    bairro: 'Conforto',
+                    text: 'teyteytey'
+                };
+                var cache = store.get('dentista_perfil_cache') || {};
+                console.log(cache);
+                cache[id] = dentista;
+                store.set('dentista_perfil_cache', cache);
+
+                defer.resolve(dentista);
+            }, 2000);
 
             return defer.promise;
         }

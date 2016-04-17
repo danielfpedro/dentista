@@ -1,9 +1,14 @@
-<ion-view view-title="{{dentista.name}}">
+<ion-view>
+    <ion-nav-title>{{dentista.name}}</ion-nav-title>
       <!-- <ion-nav-bar class="bar-clear">
             <ion-nav-back-button>
             </ion-nav-back-button>
       </ion-nav-bar> -->
     <ion-content has-bouncing="false" class="content-default fill-content-height" bar-clear="false">
+
+        <div class="text-center padding" ng-if="loading">
+            <ion-spinner></ion-spinner>
+        </div>
 
         <div class="perfil-container">
 
@@ -27,7 +32,7 @@
             </div>
 
             <div class="perfil-bio-container padding text-center">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard.
+                {{dentista.text}}
             </div>
             <div class="perfil-labels-container padding perfil text-center">
                 <span class="label label-default">

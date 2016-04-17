@@ -218,17 +218,35 @@ angular.module('starter.controllers', [])
     $scope,
     $stateParams,
     $document,
+    $timeout,
     Dentistas
 ) {
     $scope.$on('$ionicView.beforeEnter', function(){
-        $scope.dentista = null;
+        $scope.loading = false;
 
         var id = $stateParams.id;
-        Dentistas
-            .get(id)
-            .then(function(data){
-                $scope.dentista = data;
-            });
+        $scope.dentista = {};
+        
+        $timeout(function(){
+            $scope.dentista = Dentistas.getFromCache(id);
+            console.log('From Perfil Controller');
+            console.log($scope.dentista);
+            // Só mostro o loading se não tiver no cache, caso contrario faço o loading para
+            // atualizar os dados sem mostar o spinner, por tras dos panos
+            if (!$scope.dentista) {
+                $scope.loading = true;
+            }
+            Dentistas
+                .get(id)
+                .then(function(data){
+                    console.log('From Perfil Controller resolve Get dentista From Server');
+                    console.log(data);
+                    $scope.dentista = data;
+                })
+                .finally(function(){
+                    $scope.loading = false;
+                });
+        })
     });
 })
 .controller('LoginController', function(
